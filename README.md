@@ -1,6 +1,8 @@
 <img align="left" width="100" height="100" src="doc/firestorm_256.png" alt="Logo of Firestorm viewer"/>
 
-**[Firestorm](https://www.firestormviewer.org) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.**
+**Wish Viewer is an UNOFFICIAL fork of [Firestorm](https://www.firestormviewer.org). It's Firestorm, with some features I wish Firestorm had.**
+
+[Firestorm](https://www.firestormviewer.org) is a free client for 3D virtual worlds such as Second Life and various OpenSim worlds where users can create, connect and chat with others from around the world.
 
 This repository contains the official source code for the Firestorm viewer.
 
