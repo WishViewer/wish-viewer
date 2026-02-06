@@ -684,7 +684,7 @@ bool LLMuteList::autoRemove(const LLUUID& agent_id, const EAutoReason reason)
 {
     bool removed = false;
 
-    if (isMuted(agent_id))
+    if (isMuted(agent_id) && !isSoundOnlyMute(agent_id))
     {
         LLMute automute(agent_id, LLStringUtil::null, LLMute::AGENT);
         removed = true;

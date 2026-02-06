@@ -4682,7 +4682,7 @@ void LLIMMgr::noteMutedUsers(const LLUUID& session_id,
 
         for(S32 i = 0; i < count; ++i)
         {
-            if( ml->isMuted(ids.at(i)) )
+            if( ml->isMuted(ids.at(i)) && !ml->isSoundOnlyMute(ids.at(i)) )
             {
                 LLUIString muted = LLTrans::getString("muted_message");
 
