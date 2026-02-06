@@ -4294,6 +4294,67 @@ bool enable_object_unmute()
     }
 }
 
+// Sound-only mute enable/disable
+// Helper: get target avatar from selection, falling back to pick info for pie menu reliability
+static LLVOAvatar* get_avatar_for_sound_mute()
+{
+    LLVOAvatar* avatar = nullptr;
+
+    // Try selection first (works for most contexts)
+    LLViewerObject* object = LLSelectMgr::getInstance()->getSelection()->getPrimaryObject();
+    if (object)
+    {
+        avatar = find_avatar_from_object(object);
+    }
+
+    // Fallback to pick info (more reliable for pie menu first-click)
+    if (!avatar)
+    {
+        LLViewerObject* pick_obj = LLToolPie::getInstance()->getPick().getObject();
+        if (pick_obj)
+        {
+            avatar = find_avatar_from_object(pick_obj);
+        }
+    }
+
+    if (avatar && avatar->isSelf()) return nullptr;
+    return avatar;
+}
+
+bool enable_avatar_mute_sounds()
+{
+    LLVOAvatar* avatar = get_avatar_for_sound_mute();
+    if (!avatar) return false;
+
+    // Show "Mute Sounds" if NOT currently sound-muted
+    return !LLMuteList::getInstance()->isSoundMuted(avatar->getID());
+}
+
+bool enable_avatar_unmute_sounds()
+{
+    LLVOAvatar* avatar = get_avatar_for_sound_mute();
+    if (!avatar) return false;
+
+    // Show "Unmute Sounds" if currently sound-muted
+    return LLMuteList::getInstance()->isSoundMuted(avatar->getID());
+}
+
+void handle_avatar_mute_sounds()
+{
+    LLVOAvatar* avatar = get_avatar_for_sound_mute();
+    if (!avatar) return;
+
+    LLAvatarActions::muteSounds(avatar->getID());
+}
+
+void handle_avatar_unmute_sounds()
+{
+    LLVOAvatar* avatar = get_avatar_for_sound_mute();
+    if (!avatar) return;
+
+    LLAvatarActions::unmuteSounds(avatar->getID());
+}
+
 // <FS:Ansariel> Avatar render more check for pie menu
 bool check_avatar_render_mode(U32 mode)
 {
@@ -13172,6 +13233,11 @@ void initialize_menus()
     enable.add("Avatar.EnableMute", boost::bind(&enable_object_mute));
     enable.add("Object.EnableMute", boost::bind(&enable_object_mute));
     enable.add("Object.EnableUnmute", boost::bind(&enable_object_unmute));
+    // Sound-only mute
+    enable.add("Avatar.EnableMuteSounds", boost::bind(&enable_avatar_mute_sounds));
+    enable.add("Avatar.EnableUnmuteSounds", boost::bind(&enable_avatar_unmute_sounds));
+    commit.add("Avatar.MuteSounds", boost::bind(&handle_avatar_mute_sounds));
+    commit.add("Avatar.UnmuteSounds", boost::bind(&handle_avatar_unmute_sounds));
     enable.add("Object.EnableBuy", boost::bind(&enable_buy_object));
     commit.add("Object.ZoomIn", boost::bind(&handle_look_at_selection, "zoom"));
     enable.add("Object.EnableScriptInfo", boost::bind(&enable_script_info));    // <FS:CR>

@@ -14,6 +14,8 @@
 #include "llviewerregion.h"
 #include "fsassetblacklist.h"
 #include "fscommon.h"
+#include "llavataractions.h"
+#include "llmutelist.h"
 #include "rlvhandler.h"
 
 constexpr size_t num_collision_sounds = 28;
@@ -78,6 +80,8 @@ bool NACLFloaterExploreSounds::postBuild()
     getChild<LLButton>("block_avatar_worn_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::WORN));
     getChild<LLButton>("block_avatar_rezzed_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::REZZED));
     getChild<LLButton>("block_avatar_gesture_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::blacklistSound, this, FSAssetBlacklist::eBlacklistFlag::GESTURE));
+    getChild<LLButton>("mute_avatar_all_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::muteAllSounds, this));
+    getChild<LLButton>("unmute_avatar_sounds_btn")->setClickedCallback(boost::bind(&NACLFloaterExploreSounds::unmuteAllSounds, this));
 
     mHistoryScroller = getChild<LLScrollListCtrl>("sound_list");
     mHistoryScroller->setCommitCallback(boost::bind(&NACLFloaterExploreSounds::handleSelection, this));
@@ -104,6 +108,8 @@ void NACLFloaterExploreSounds::handleSelection()
     childSetEnabled("block_avatar_worn_sounds_btn", num_selected);
     childSetEnabled("block_avatar_rezzed_sounds_btn", num_selected);
     childSetEnabled("block_avatar_gesture_sounds_btn", num_selected);
+    childSetEnabled("mute_avatar_all_sounds_btn", num_selected);
+    childSetEnabled("unmute_avatar_sounds_btn", num_selected);
 }
 
 LLSoundHistoryItem NACLFloaterExploreSounds::getItem(const LLUUID& itemID) const
@@ -475,4 +481,32 @@ void NACLFloaterExploreSounds::onBlacklistAvatarNameCacheCallback(const LLUUID& 
         mBlacklistAvatarNameCacheConnections.erase(found);
     }
     FSAssetBlacklist::getInstance()->addNewItemToBlacklist(flag == FSAssetBlacklist::eBlacklistFlag::NONE ? asset_id : av_id, av_name.getCompleteName(), region_name, LLAssetType::AT_SOUND, flag);
+}
+
+void NACLFloaterExploreSounds::muteAllSounds()
+{
+    for (const auto* selected_item : mHistoryScroller->getAllSelected())
+    {
+        LLSoundHistoryItem item = getItem(selected_item->getValue());
+        if (item.mID.isNull() || item.mOwnerID.isNull() || item.mOwnerID == gAgent.getID())
+        {
+            continue;
+        }
+
+        LLAvatarActions::muteSounds(item.mOwnerID);
+    }
+}
+
+void NACLFloaterExploreSounds::unmuteAllSounds()
+{
+    for (const auto* selected_item : mHistoryScroller->getAllSelected())
+    {
+        LLSoundHistoryItem item = getItem(selected_item->getValue());
+        if (item.mID.isNull() || item.mOwnerID.isNull())
+        {
+            continue;
+        }
+
+        LLAvatarActions::unmuteSounds(item.mOwnerID);
+    }
 }

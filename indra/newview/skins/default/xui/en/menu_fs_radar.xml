@@ -214,6 +214,24 @@
 			parameter="can_block" />
 	</menu_item_check>
 	<menu_item_call
+		label="Mute Sounds"
+		name="mute_sounds">
+		<menu_item_call.on_click
+			function="Avatar.MuteSounds" />
+		<menu_item_call.on_visible
+			function="Avatar.EnableItem"
+			parameter="can_mute_sounds" />
+	</menu_item_call>
+	<menu_item_call
+		label="Unmute Sounds"
+		name="unmute_sounds">
+		<menu_item_call.on_click
+			function="Avatar.UnmuteSounds" />
+		<menu_item_call.on_visible
+			function="Avatar.EnableItem"
+			parameter="can_unmute_sounds" />
+	</menu_item_call>
+	<menu_item_call
 		label="Report"
 		name="report">
 		<menu_item_call.on_click

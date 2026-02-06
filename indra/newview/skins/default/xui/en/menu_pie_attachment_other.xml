@@ -26,12 +26,30 @@
         </pie_slice>
         <pie_slice
             enabled="false"
-            label="Part. Owner"
+            label="Particles"
             name="Mute Particle">
             <pie_slice.on_click
                 function="Particle.Mute" />
             <pie_slice.on_enable
                 function="EnableMuteParticle" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="Mute Sounds"
+            name="Avatar Mute Sounds">
+            <pie_slice.on_click
+                function="Avatar.MuteSounds" />
+            <pie_slice.on_enable
+                function="Avatar.EnableMuteSounds" />
+        </pie_slice>
+        <pie_slice
+            enabled="true"
+            label="Unmute Sounds"
+            name="Avatar Unmute Sounds">
+            <pie_slice.on_click
+                function="Avatar.UnmuteSounds" />
+            <pie_slice.on_enable
+                function="Avatar.EnableUnmuteSounds" />
         </pie_slice>
     </pie_menu>
     <pie_slice

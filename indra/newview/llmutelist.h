@@ -113,6 +113,12 @@ public:
     // Alternate (convenience) form for places we don't need to pass the name, but do need flags
     bool isMuted(const LLUUID& id, U32 flags) const { return isMuted(id, LLStringUtil::null, flags); };
 
+    // Sound-only mute: mutes object sounds but allows text/voice/particles
+    bool addSoundMute(const LLUUID& avatar_id, const std::string& name);
+    bool removeSoundMute(const LLUUID& avatar_id);
+    bool isSoundMuted(const LLUUID& avatar_id) const;      // True if sounds are muted (includes full mutes)
+    bool isSoundOnlyMute(const LLUUID& avatar_id) const;   // True if ONLY sounds are muted (not text/voice/particles)
+
     static bool isLinden(const std::string& name);
 
     bool isLoaded() const { return mLoadState == ML_LOADED; }

@@ -471,7 +471,7 @@
         </pie_slice>
         <pie_slice
             enabled="false"
-            label="Part. Owner"
+            label="Particles"
             name="Mute Particle">
             <pie_slice.on_click
                 function="Particle.Mute" />

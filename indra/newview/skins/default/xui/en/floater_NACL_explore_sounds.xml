@@ -7,7 +7,7 @@
  height="300"
  width="550"
  min_width="550"
- min_height="170"
+ min_height="220"
  name="sound_explorer"
  title="Sounds"
  save_rect="true"
@@ -40,7 +40,7 @@
 	<check_box follows="top|left" bottom_delta="0" left_delta="64" width="160" name="collision_chk" label="Default Collision Sounds" control_name="FloaterSoundsLogCollisions" />
 	<check_box follows="top|left" bottom_delta="0" left_delta="160" width="110" name="repeated_asset_chk" label="Repeated Asset" control_name="FloaterSoundsLogRepeats" />
 	<check_box follows="top|left" bottom_delta="0" left_delta="110" width="80" name="pause_chk" label="Pause Log" initial_value="false"/>
-	<scroll_list column_padding="0" draw_heading="true" follows="all" left="10" multi_select="true" name="sound_list" search_column="0" top="40" right="-10" bottom="-60">
+	<scroll_list column_padding="0" draw_heading="true" follows="all" left="10" multi_select="true" name="sound_list" search_column="0" top="40" right="-10" bottom="-85">
 		<columns dynamicwidth="false" width="80" label="Playing" name="playing" />
 		<columns dynamicwidth="false" width="100" label="Type" name="type" />
 		<columns dynamicwidth="true" label="Owner" name="owner" />
@@ -56,4 +56,6 @@
 	<button bottom_delta="25" follows="left|bottom" height="20" label="Block AV worn sounds" name="block_avatar_worn_sounds_btn" left="10" width="173" enabled="false"/>
 	<button bottom_delta="0" follows="left|bottom" height="20" label="Block AV rezzed sounds" name="block_avatar_rezzed_sounds_btn" left_pad="5" width="173" enabled="false"/>
 	<button bottom_delta="0" follows="left|bottom" height="20" label="Block AV gesture sounds" name="block_avatar_gesture_sounds_btn" left_pad="5" width="173" enabled="false"/>
+	<button bottom_delta="25" follows="left|bottom" height="20" label="Mute AV All Sounds (Synced)" name="mute_avatar_all_sounds_btn" left="10" width="260" enabled="false" tool_tip="Server-synced: mutes all sound types from selected avatar's owner. Persists across sessions."/>
+	<button bottom_delta="0" follows="left|bottom" height="20" label="Unmute AV Sounds" name="unmute_avatar_sounds_btn" left_pad="5" width="260" enabled="false" tool_tip="Remove server-synced sound mute from selected avatar's owner."/>
 </floater>

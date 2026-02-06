@@ -137,6 +137,7 @@ private:
     void onClickPay();
     void onClickShare();
     void onToggleMute();
+    void onToggleSoundMute();
     void onClickReport();
     void onClickFreeze();
     void onClickEject();
@@ -150,6 +151,8 @@ private:
     bool onVisibleZoomIn();
     bool enableMute();
     bool enableUnmute();
+    bool enableSoundMute();
+    bool enableSoundUnmute();
     bool enableTeleportOffer();
     bool enableTeleportRequest();
     bool enablePay();
@@ -253,6 +256,7 @@ LLInspectAvatar::LLInspectAvatar(const LLSD& sd)
     mCommitCallbackRegistrar.add("InspectAvatar.Pay",                           boost::bind(&LLInspectAvatar::onClickPay, this));
     mCommitCallbackRegistrar.add("InspectAvatar.Share",                         boost::bind(&LLInspectAvatar::onClickShare, this));
     mCommitCallbackRegistrar.add("InspectAvatar.ToggleMute",                    boost::bind(&LLInspectAvatar::onToggleMute, this));
+    mCommitCallbackRegistrar.add("InspectAvatar.ToggleSoundMute",              boost::bind(&LLInspectAvatar::onToggleSoundMute, this));
     mCommitCallbackRegistrar.add("InspectAvatar.Freeze",                        boost::bind(&LLInspectAvatar::onClickFreeze, this));
     mCommitCallbackRegistrar.add("InspectAvatar.Eject",                         boost::bind(&LLInspectAvatar::onClickEject, this));
     mCommitCallbackRegistrar.add("InspectAvatar.Kick",                          boost::bind(&LLInspectAvatar::onClickKick, this));
@@ -275,6 +279,8 @@ LLInspectAvatar::LLInspectAvatar(const LLSD& sd)
     mEnableCallbackRegistrar.add("InspectAvatar.Gear.EnablePay",                boost::bind(&LLInspectAvatar::enablePay, this));
     mEnableCallbackRegistrar.add("InspectAvatar.EnableMute",                    boost::bind(&LLInspectAvatar::enableMute, this));
     mEnableCallbackRegistrar.add("InspectAvatar.EnableUnmute",                  boost::bind(&LLInspectAvatar::enableUnmute, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.EnableSoundMute",              boost::bind(&LLInspectAvatar::enableSoundMute, this));
+    mEnableCallbackRegistrar.add("InspectAvatar.EnableSoundUnmute",            boost::bind(&LLInspectAvatar::enableSoundUnmute, this));
     // </FS:Ansariel>
 
     // can't make the properties request until the widgets are constructed
@@ -862,6 +868,30 @@ bool LLInspectAvatar::enableUnmute()
     else
     {
         return false;
+    }
+}
+
+bool LLInspectAvatar::enableSoundMute()
+{
+    bool is_self = mAvatarID == gAgent.getID();
+    return !is_self && !LLAvatarActions::isSoundMuted(mAvatarID);
+}
+
+bool LLInspectAvatar::enableSoundUnmute()
+{
+    bool is_self = mAvatarID == gAgent.getID();
+    return !is_self && LLAvatarActions::isSoundMuted(mAvatarID);
+}
+
+void LLInspectAvatar::onToggleSoundMute()
+{
+    if (LLAvatarActions::isSoundMuted(mAvatarID))
+    {
+        LLAvatarActions::unmuteSounds(mAvatarID);
+    }
+    else
+    {
+        LLAvatarActions::muteSounds(mAvatarID);
     }
 }
 

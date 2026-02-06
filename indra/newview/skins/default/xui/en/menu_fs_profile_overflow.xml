@@ -66,6 +66,28 @@
      parameter="add_to_contact_set"/>
   </menu_item_call>
   <menu_item_call
+   label="Mute Sounds"
+   layout="topleft"
+   name="mute_sounds">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="mute_sounds"/>
+    <menu_item_call.on_visible
+     function="Profile.EnableItem"
+     parameter="mute_sounds"/>
+  </menu_item_call>
+  <menu_item_call
+   label="Unmute Sounds"
+   layout="topleft"
+   name="unmute_sounds">
+    <menu_item_call.on_click
+     function="Profile.Commit"
+     parameter="unmute_sounds"/>
+    <menu_item_call.on_visible
+     function="Profile.EnableItem"
+     parameter="unmute_sounds"/>
+  </menu_item_call>
+  <menu_item_call
    label="Copy Name"
    layout="topleft"
    name="copy_name_to_clipboard">

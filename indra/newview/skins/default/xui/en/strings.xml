@@ -1317,6 +1317,7 @@ If you continue to receive this message, please contact Second Life support for 
 	<string name="MuteAgent">(Resident)</string>
 	<string name="MuteObject">(Object)</string>
 	<string name="MuteGroup">(Group)</string>
+	<string name="MuteSounds">(Sounds)</string>
 	<string name="MuteExternal">(External)</string>
 
 	<!-- Region/Estate Covenant -->

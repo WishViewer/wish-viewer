@@ -3975,7 +3975,7 @@ void LLVOAvatar::idleUpdateNameTagText(bool new_name)
     }
     else
     {
-        is_muted = isInMuteList();
+        is_muted = isInMuteList() && !LLMuteList::getInstance()->isSoundOnlyMute(getID());
     }
 //  bool is_friend = isBuddy();
 // [RLVa:KB] - Checked: RLVa-1.2.2
@@ -4669,7 +4669,8 @@ bool LLVOAvatar::isVisuallyMuted()
     // </FS:minerjr> [FIRE-35735]
 
     // <FS:Ansariel> FIRE-11783: Always visually mute avatars that are muted
-    if (!isSelf() && isInMuteList())
+    // Skip visual muting for sound-only mutes (they should remain fully rendered)
+    if (!isSelf() && isInMuteList() && !LLMuteList::getInstance()->isSoundOnlyMute(getID()))
     {
         return true;
     }
@@ -12967,7 +12968,7 @@ LLVOAvatar::AvatarOverallAppearance LLVOAvatar::getOverallAppearance() const
     }
     else // !isSelf()
     {
-        if (isInMuteList())
+        if (isInMuteList() && !LLMuteList::getInstance()->isSoundOnlyMute(getID()))
         {
             result = AOA_INVISIBLE;
         }
@@ -13008,7 +13009,7 @@ void LLVOAvatar::calcMutedAVColor()
         new_color = LLColor4::grey4;
         change_msg = " not rendered: color is grey4";
     }
-    else if (isInMuteList()) // the user blocked them
+    else if (isInMuteList() && !LLMuteList::getInstance()->isSoundOnlyMute(getID())) // the user blocked them
     {
         // blocked avatars are dark grey
         new_color = LLColor4::grey4;

@@ -1893,6 +1893,28 @@ bool LLAvatarActions::canBlock(const LLUUID& id)
     return !is_self && !is_linden;
 }
 
+// static
+void LLAvatarActions::muteSounds(const LLUUID& id)
+{
+    std::string name;
+    LLAvatarName av_name;
+    if (LLAvatarNameCache::get(id, &av_name))
+        name = av_name.getCompleteName();
+    LLMuteList::getInstance()->addSoundMute(id, name);
+}
+
+// static
+void LLAvatarActions::unmuteSounds(const LLUUID& id)
+{
+    LLMuteList::getInstance()->removeSoundMute(id);
+}
+
+// static
+bool LLAvatarActions::isSoundMuted(const LLUUID& id)
+{
+    return LLMuteList::getInstance()->isSoundMuted(id);
+}
+
 // [SL:KB] - Patch: UI-SidepanelPeople | Checked: 2010-12-03 (Catznip-2.4.0g) | Modified: Catznip-2.4.0g
 void LLAvatarActions::report(const LLUUID& idAgent)
 {

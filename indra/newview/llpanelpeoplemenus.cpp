@@ -86,6 +86,8 @@ LLContextMenu* PeopleContextMenu::createMenu()
         registrar.add("Avatar.Share",           boost::bind(&LLAvatarActions::share,                    id));
         registrar.add("Avatar.Pay",             boost::bind(&LLAvatarActions::pay,                      id));
         registrar.add("Avatar.BlockUnblock",    boost::bind(&LLAvatarActions::toggleBlock,              id));
+        registrar.add("Avatar.MuteSounds",      boost::bind(&LLAvatarActions::muteSounds,               id));
+        registrar.add("Avatar.UnmuteSounds",    boost::bind(&LLAvatarActions::unmuteSounds,             id));
         registrar.add("Avatar.InviteToGroup",   boost::bind(&LLAvatarActions::inviteToGroup,            id));
         registrar.add("Avatar.TeleportRequest", boost::bind(&PeopleContextMenu::requestTeleport,        this));
         registrar.add("Avatar.Calllog",         boost::bind(&LLAvatarActions::viewChatHistory,          id));
@@ -307,6 +309,16 @@ bool PeopleContextMenu::enableContextMenuItem(const LLSD& userdata)
     else if (item == std::string("can_share") || item == std::string("can_pay"))
     {
         return mUUIDs.size() == 1;
+    }
+    else if (item == std::string("can_mute_sounds"))
+    {
+        const LLUUID& id = mUUIDs.front();
+        return !LLAvatarActions::isSoundMuted(id);
+    }
+    else if (item == std::string("can_unmute_sounds"))
+    {
+        const LLUUID& id = mUUIDs.front();
+        return LLAvatarActions::isSoundMuted(id);
     }
     return false;
 }

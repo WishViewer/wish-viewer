@@ -112,6 +112,24 @@
     </menu_item_call>
     <!-- </FS:Zi> -->
     <menu_item_call
+     enabled="true"
+     label="Mute Sounds"
+     name="Avatar Mute Sounds">
+        <menu_item_call.on_click
+         function="Avatar.MuteSounds" />
+        <menu_item_call.on_visible
+         function="Avatar.EnableMuteSounds" />
+    </menu_item_call>
+    <menu_item_call
+     enabled="true"
+     label="Unmute Sounds"
+     name="Avatar Unmute Sounds">
+        <menu_item_call.on_click
+         function="Avatar.UnmuteSounds" />
+        <menu_item_call.on_visible
+         function="Avatar.EnableUnmuteSounds" />
+    </menu_item_call>
+    <menu_item_call
      label="Report"
      name="abuse">
         <menu_item_call.on_click

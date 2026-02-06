@@ -75,6 +75,22 @@
      function="InspectAvatar.EnableUnmute" />
   </menu_item_call>
   <menu_item_call
+   label="Mute Sounds"
+   name="mute_sounds">
+    <menu_item_call.on_click
+     function="InspectAvatar.ToggleSoundMute"/>
+    <menu_item_call.on_visible
+     function="InspectAvatar.EnableSoundMute" />
+  </menu_item_call>
+  <menu_item_call
+   label="Unmute Sounds"
+   name="unmute_sounds">
+    <menu_item_call.on_click
+     function="InspectAvatar.ToggleSoundMute"/>
+    <menu_item_call.on_visible
+     function="InspectAvatar.EnableSoundUnmute" />
+  </menu_item_call>
+  <menu_item_call
    label="Report"
    name="report">
     <menu_item_call.on_click

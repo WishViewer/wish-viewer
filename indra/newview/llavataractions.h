@@ -177,6 +177,10 @@ public:
      */
     static bool canBlock(const LLUUID& id);
 
+    static void muteSounds(const LLUUID& id);
+    static void unmuteSounds(const LLUUID& id);
+    static bool isSoundMuted(const LLUUID& id);
+
     /**
      * Return true if the avatar is in a P2P voice call with a given user
      */

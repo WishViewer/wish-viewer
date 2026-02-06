@@ -132,6 +132,14 @@ LLMute::LLMute(const LLUUID& id, const std::string& name, EType type, U32 flags)
 
 std::string LLMute::getDisplayType() const
 {
+    // Sound-only mute: text/voice/particles exempt, sounds muted
+    if (mType == AGENT &&
+        (mFlags & flagTextChat) && (mFlags & flagVoiceChat) && (mFlags & flagParticles) &&
+        !(mFlags & flagObjectSounds))
+    {
+        return LLTrans::getString("MuteSounds");
+    }
+
     switch (mType)
     {
         case BY_NAME:
@@ -536,6 +544,107 @@ void LLMuteList::updateRemove(const LLMute& mute)
         FSCommon::report_to_nearby_chat(LLTrans::getString("Mute_Remove", args));
     }
     // </FS:Ansariel>
+}
+
+//-----------------------------------------------------------------------------
+// Sound-only mute functions
+//-----------------------------------------------------------------------------
+bool LLMuteList::addSoundMute(const LLUUID& avatar_id, const std::string& name)
+{
+    // Can't mute self
+    if (avatar_id == gAgent.getID())
+    {
+        return false;
+    }
+
+    LLMute mute(avatar_id, name, LLMute::AGENT);
+
+    // Check if already exists
+    mute_set_t::iterator it = mMutes.find(mute);
+    if (it != mMutes.end())
+    {
+        // Already exists - turn off the flagObjectSounds bit to mute sounds
+        LLMute localmute = *it;
+        if (!(localmute.mFlags & LLMute::flagObjectSounds))
+        {
+            // Sounds already muted
+            return true;
+        }
+        localmute.mFlags &= ~LLMute::flagObjectSounds;
+        mMutes.erase(it);
+        mMutes.insert(localmute);
+        updateAdd(localmute, false);
+        notifyObservers();
+        notifyObserversDetailed(localmute);
+        return true;
+    }
+    else
+    {
+        // New entry - start with text/voice/particles unmuted, sounds muted
+        // mFlags = 0x07 means flagTextChat | flagVoiceChat | flagParticles are set (exempt)
+        // flagObjectSounds is NOT set, so sounds ARE muted
+        mute.mFlags = LLMute::flagTextChat | LLMute::flagVoiceChat | LLMute::flagParticles;
+        mMutes.insert(mute);
+        updateAdd(mute, true);
+        notifyObservers();
+        notifyObserversDetailed(mute);
+        return true;
+    }
+}
+
+bool LLMuteList::removeSoundMute(const LLUUID& avatar_id)
+{
+    LLMute mute(avatar_id);
+    mute_set_t::iterator it = mMutes.find(mute);
+    if (it == mMutes.end())
+    {
+        return false;  // Not in list
+    }
+
+    LLMute localmute = *it;
+    localmute.mFlags |= LLMute::flagObjectSounds;  // Set the flag = sounds NOT muted
+
+    mMutes.erase(it);
+
+    if (localmute.mFlags == LLMute::flagAll)
+    {
+        // All flags set = nothing muted, remove entry entirely
+        updateRemove(localmute);
+    }
+    else
+    {
+        // Other things still muted, just update the flags
+        mMutes.insert(localmute);
+        updateAdd(localmute, false);
+    }
+    notifyObservers();
+    notifyObserversDetailed(localmute);
+    return true;
+}
+
+bool LLMuteList::isSoundMuted(const LLUUID& avatar_id) const
+{
+    LLMute mute(avatar_id);
+    mute_set_t::const_iterator it = mMutes.find(mute);
+    if (it == mMutes.end())
+    {
+        return false;
+    }
+    // Sound is muted if flagObjectSounds is NOT set
+    return !(it->mFlags & LLMute::flagObjectSounds);
+}
+
+bool LLMuteList::isSoundOnlyMute(const LLUUID& avatar_id) const
+{
+    LLMute mute(avatar_id);
+    mute_set_t::const_iterator it = mMutes.find(mute);
+    if (it == mMutes.end())
+    {
+        return false;
+    }
+    // Sound-only mute has exactly these flags: text+voice+particles unmuted (0x07)
+    // flagObjectSounds is NOT set, so sounds ARE muted
+    return it->mFlags == (LLMute::flagTextChat | LLMute::flagVoiceChat | LLMute::flagParticles);
 }
 
 void notify_automute_callback(const LLUUID& agent_id, const LLAvatarName& full_name, LLMuteList::EAutoReason reason)

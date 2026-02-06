@@ -74,6 +74,8 @@ LLContextMenu* FSRadarMenu::createMenu()
         registrar.add("Avatar.Share",                           boost::bind(&LLAvatarActions::share,                        id));
         registrar.add("Avatar.Pay",                             boost::bind(&LLAvatarActions::pay,                          id));
         registrar.add("Avatar.BlockUnblock",                    boost::bind(&LLAvatarActions::toggleBlock,                  id));
+        registrar.add("Avatar.MuteSounds",                      boost::bind(&LLAvatarActions::muteSounds,                   id));
+        registrar.add("Avatar.UnmuteSounds",                    boost::bind(&LLAvatarActions::unmuteSounds,                 id));
         registrar.add("Avatar.ZoomIn",                          boost::bind(&LLAvatarActions::zoomIn,                       id));
         registrar.add("Avatar.Report",                          boost::bind(&LLAvatarActions::report,                       id));
         registrar.add("Avatar.Eject",                           boost::bind(&LLAvatarActions::landEject,                    id));
@@ -239,6 +241,16 @@ bool FSRadarMenu::enableContextMenuItem(const LLSD& userdata)
     else if (item == std::string("can_callog"))
     {
         return LLLogChat::isTranscriptExist(mUUIDs.front());
+    }
+    else if (item == std::string("can_mute_sounds"))
+    {
+        const LLUUID& id = mUUIDs.front();
+        return !LLAvatarActions::isSoundMuted(id);
+    }
+    else if (item == std::string("can_unmute_sounds"))
+    {
+        const LLUUID& id = mUUIDs.front();
+        return LLAvatarActions::isSoundMuted(id);
     }
     return false;
 }

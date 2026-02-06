@@ -2011,6 +2011,14 @@ void LLPanelProfileSecondLife::onCommitMenu(const LLSD& userdata)
         mUnblockButton->setVisible(is_blocked);
         // </FS:PP>
     }
+    else if (item_name == "mute_sounds")
+    {
+        LLAvatarActions::muteSounds(agent_id);
+    }
+    else if (item_name == "unmute_sounds")
+    {
+        LLAvatarActions::unmuteSounds(agent_id);
+    }
     else if (item_name == "copy_user_id")
     {
         LLWString wstr = utf8str_to_wstring(getAvatarId().asString());
@@ -2179,6 +2187,14 @@ bool LLPanelProfileSecondLife::onEnableMenu(const LLSD& userdata)
     else if (item_name == "toggle_block_agent")
     {
         return LLAvatarActions::canBlock(agent_id);
+    }
+    else if (item_name == "mute_sounds")
+    {
+        return agent_id != gAgentID && !LLAvatarActions::isSoundMuted(agent_id);
+    }
+    else if (item_name == "unmute_sounds")
+    {
+        return agent_id != gAgentID && LLAvatarActions::isSoundMuted(agent_id);
     }
     else if (item_name == "agent_permissions")
     {
